@@ -25,15 +25,19 @@ def close_root():
     root.destroy()
 
 
-def open_file():
+def get_filepath():
     filepath = filedialog.askopenfilename(filetypes=[("Excel files", ".xlsx .xls")])
     if filepath != '':
         file_label.configure(text=f'Выбранный файл: {filepath}')
 
 
+def open_file():
+    return pd.read_excel(file_label.cget('text').split('файл: ')[1])
+
+
 def calculate():
     try:
-        df = pd.read_excel(file_label.cget('text').split('файл: ')[1])
+        df = open_file()
         figure = Figure(figsize=(8, 5), dpi=100)
         figure_canvas = FigureCanvasTkAgg(figure, solution_frame)
         toolbar = NavigationToolbar2Tk(figure_canvas, solution_frame, pack_toolbar=False)
@@ -45,7 +49,7 @@ def calculate():
         figure.patch.set_facecolor('xkcd:light blue grey')
         figure_canvas.get_tk_widget().grid(row=0, column=0, padx=10, pady=(10, 0))
         toolbar.grid(row=1, column=0, padx=10, pady=(0, 10), sticky='w')
-        table_label.configure(text=df.to_string())
+        table_label.configure(text=df.transpose().to_string())
     except IndexError:
         messagebox.showerror('Ошибка', 'Файл не выбран!')
     except ValueError:
@@ -60,7 +64,7 @@ calculate_button = tk.CTkButton(menu_frame, text='Провести расчет'
                                 fg_color=('#CEB1BE', '#004052'), hover_color=('#B97375', '#005066'),
                                 border_color=('#2D2D34', '#00607A'), text_color=('#2D2D34', '#a9d6e5'))
 load_data_button = tk.CTkButton(menu_frame, text='Загрузить данные', width=300, height=50, corner_radius=10,
-                                border_width=2, font=('Merriweather Regular', 20), command=open_file,
+                                border_width=2, font=('Merriweather Regular', 20), command=get_filepath,
                                 fg_color=('#CEB1BE', '#004052'), hover_color=('#B97375', '#005066'),
                                 border_color=('#2D2D34', '#00607A'), text_color=('#2D2D34', '#a9d6e5'))
 exit_button = tk.CTkButton(menu_frame, text='Выход', width=300, height=50, corner_radius=10, border_width=2,
@@ -73,8 +77,8 @@ graph_label = tk.CTkLabel(solution_frame, text='График', width=300, height
                           text_color=('#2D2D34', '#a9d6e5'))
 table_label = tk.CTkLabel(solution_frame, text='Таблица', width=300, height=16, font=('Merriweather Regular', 14),
                           text_color=('#2D2D34', '#a9d6e5'))
+table_scroll = tk.CTkScrollbar(table_label, hover=True)
 
-# root.columnconfigure(index=0, weight=1)
 root.columnconfigure(index=1, weight=1)
 root.rowconfigure(index=0, weight=1)
 
