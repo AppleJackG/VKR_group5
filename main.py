@@ -20,22 +20,31 @@ matplotlib.use('TkAgg')
 plt.style.use('seaborn-v0_8-deep')
 
 
-def close_root():
+def close_root() -> None:
+    """Выход из программы"""
     time.sleep(0.1)
     root.destroy()
 
 
-def get_filepath():
+def get_filepath() -> None:
+    """Получить путь к файлу и изменить текст"""
     filepath = filedialog.askopenfilename(filetypes=[("Excel files", ".xlsx .xls")])
     if filepath != '':
         file_label.configure(text=f'Выбранный файл: {filepath}')
 
 
-def open_file():
+def open_file() -> pd.DataFrame:
+    """Возвращает таблицу с данными"""
     return pd.read_excel(file_label.cget('text').split('файл: ')[1])
 
 
-def calculate():
+def calculate(df: pd.DataFrame) -> None:
+    """Функция проводит расчет и должна вернуть данные, для построения графика"""
+    pass
+
+
+def make_plot() -> None:
+    """Построение графика"""
     try:
         df = open_file()
         figure = Figure(figsize=(8, 5), dpi=100)
@@ -60,7 +69,7 @@ menu_frame = tk.CTkFrame(root, width=400, height=800, fg_color=('#E2DCDE', '#003
 solution_frame = tk.CTkFrame(root, width=400, height=800, fg_color=('#E2DCDE', '#00303D'), corner_radius=14)
 
 calculate_button = tk.CTkButton(menu_frame, text='Провести расчет', width=300, height=50, corner_radius=10,
-                                border_width=2, font=('Merriweather Regular', 20), command=calculate,
+                                border_width=2, font=('Merriweather Regular', 20), command=make_plot,
                                 fg_color=('#CEB1BE', '#004052'), hover_color=('#B97375', '#005066'),
                                 border_color=('#2D2D34', '#00607A'), text_color=('#2D2D34', '#a9d6e5'))
 load_data_button = tk.CTkButton(menu_frame, text='Загрузить данные', width=300, height=50, corner_radius=10,
