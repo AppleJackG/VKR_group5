@@ -12,7 +12,7 @@ tk.set_appearance_mode("dark")
 
 root = tk.CTk(fg_color=('#F1E4E8', '#002029'))
 root.title('Расчет кинетической кривой')
-root.iconbitmap('logo.ico')
+root.iconbitmap('media/logo.ico')
 root.geometry('1400x800+200+50')
 root.minsize(1400, 700)
 
